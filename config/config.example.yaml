@@ -1,0 +1,84 @@
+# ---------------------------------------------------------------------------
+# L3 Agent Configuration
+# Copy this file to config/config.yaml and fill in your real values.
+# Never commit config.yaml (with real secrets) to git.
+# ---------------------------------------------------------------------------
+
+jira:
+  server: "https://yourcompany.atlassian.net"
+  email: "[email protected]"
+  api_token: "${JIRA_API_TOKEN}"          # set as env var, referenced here
+  project_key: "L3"                        # e.g. the Jira project this agent watches
+  poll_interval_seconds: 60
+
+gitlab:
+  url: "https://gitlab.yourcompany.com"
+  private_token: "${GITLAB_TOKEN}"
+  # Map Jira project keys -> GitLab project IDs / paths, since one company
+  # usually has many repos, each possibly in a different language.
+  project_map:
+    L3: "group/subgroup/your-service-repo"
+
+  clone_dir: "./repos"                     # local clone cache
+  default_branch: "main"
+  create_merge_request: true               # agent opens an MR, never auto-merges
+  fix_branch_prefix: "l3-agent/fix"
+
+llm:
+  # "provider" selects which backend is used at runtime.
+  # You can override per-call in code, this is just the default.
+  provider: "anthropic"        # anthropic | openai | ollama
+
+  anthropic:
+    model: "claude-sonnet-4-6"
+    api_key: "${ANTHROPIC_API_KEY}"
+
+  openai:
+    model: "gpt-4.1"
+    api_key: "${OPENAI_API_KEY}"
+
+  ollama:
+    model: "qwen2.5-coder:14b"   # any locally pulled model
+    host: "http://localhost:11434"
+
+rag:
+  vector_db_path: "./vector_store"
+  collection_name: "codebase"
+  embedding_model: "sentence-transformers/all-MiniLM-L6-v2"
+  chunk_lines: 120          # lines per chunk (language-agnostic, works for any language)
+  chunk_overlap_lines: 20
+  top_k: 8                  # how many chunks to retrieve per query
+  # File extensions to index. Add/remove based on the repo's actual language(s).
+  include_extensions:
+    - ".py"
+    - ".js"
+    - ".ts"
+    - ".java"
+    - ".go"
+    - ".rb"
+    - ".php"
+    - ".cs"
+    - ".cpp"
+    - ".c"
+    - ".sql"
+    - ".yaml"
+    - ".yml"
+  exclude_dirs:
+    - "node_modules"
+    - ".git"
+    - "vendor"
+    - "dist"
+    - "build"
+    - "__pycache__"
+
+workflow:
+  # Safety gate: agent NEVER merges automatically. This just controls
+  # whether it opens a draft Merge Request for human review.
+  auto_open_merge_request: true
+  min_confidence_to_propose_fix: 0.6   # below this, agent only reports RCA, no fix diff
+  run_existing_tests: true
+  test_command: "pytest -q"            # override per-repo/language as needed
+
+logging:
+  level: "INFO"
+  audit_log_path: "./logs/agent_audit.jsonl"

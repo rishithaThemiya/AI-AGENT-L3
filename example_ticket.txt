@@ -1,0 +1,6 @@
+Title: Discount not applied on checkout for VIP users
+Description: When a VIP user applies a discount code at checkout, the total
+price is not reduced -- the original price is charged instead. Regular
+(non-VIP) users are not affected, discount works fine for them. This
+started happening after last week's release. Reported by 3 customers so
+far via support tickets.

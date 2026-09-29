@@ -1,0 +1,24 @@
+# Orchestration
+langgraph>=0.2.0
+langchain-core>=0.3.0
+
+# LLM Providers (install whichever you plan to use)
+anthropic>=0.34.0
+openai>=1.40.0
+ollama>=0.3.0
+
+# Jira integration
+jira>=3.8.0
+
+# GitLab integration
+python-gitlab>=4.4.0
+GitPython>=3.1.43
+
+# RAG / Embeddings / Vector store
+chromadb>=0.5.0
+sentence-transformers>=3.0.0
+
+# Utilities
+pyyaml>=6.0
+python-dotenv>=1.0.1
+rich>=13.7.0

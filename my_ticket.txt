@@ -1,0 +1,7 @@
+Title: Verify KPI_001 calculation logic in Home category for client confirmation
+Description: Need to review and confirm the existing code logic used to
+calculate KPI_001 under the Home dashboard category, in order to explain
+and verify it to the client. Please identify the relevant PHP file(s) and
+the SQL query used to compute this KPI, and summarize what the calculation
+logic actually does (what tables/fields it uses, any filters or date
+ranges applied, and how the final value is derived).
